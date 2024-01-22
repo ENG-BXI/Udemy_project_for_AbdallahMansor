@@ -38,7 +38,7 @@ DefualteButtomHomeScreen({
       width: width,
       child: ElevatedButton(
         onPressed: function,
-        child: Text(text ?? ''),
+        child: Text(text!.toUpperCase() ?? ''),
       ),
     );
  
