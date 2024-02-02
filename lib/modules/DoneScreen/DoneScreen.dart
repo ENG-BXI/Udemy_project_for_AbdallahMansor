@@ -9,7 +9,7 @@ class DoneScren extends StatelessWidget {
   Widget build(BuildContext context) {
     TodoAppBloc mybloc = BlocProvider.of<TodoAppBloc>(context);
     mybloc.add(selectEvent_Done());
-
+    
     return BlocBuilder<TodoAppBloc, TodoAppState>(
       builder: (context, state) {
         if (mybloc.data_Done.length != 0) {

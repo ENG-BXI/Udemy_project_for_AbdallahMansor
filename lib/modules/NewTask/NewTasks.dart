@@ -10,8 +10,6 @@ class NewTask extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TodoAppBloc mybloc = BlocProvider.of<TodoAppBloc>(context);
-    mybloc.add(selectEvent_NewTasks());
-
     return BlocBuilder<TodoAppBloc, TodoAppState>(
       builder: (context, state) {
         if (mybloc.data_NewTasks.length != 0) {
@@ -47,9 +45,10 @@ class NewTask extends StatelessWidget {
                       ),
                       IconButton(
                         onPressed: () {
-                          mybloc.add(deleteFromDataBase_by_Where(
-                              mybloc.data_NewTasks[index]['id']));
-                          debugPrint("delete onpress");
+                          mybloc.add(updateDataBaseEvent(
+                              mybloc.data_NewTasks[index]['id'], 'done'));
+
+                          debugPrint("update done onpress");
                         },
                         icon: Icon(
                           Icons.check_circle_outline,
@@ -57,7 +56,10 @@ class NewTask extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          mybloc.add(updateDataBaseEvent(
+                              mybloc.data_NewTasks[index]['id'], 'Archive'));
+                        },
                         icon: Icon(
                           Icons.archive,
                           color: Colors.brown,
@@ -79,6 +81,7 @@ class NewTask extends StatelessWidget {
                 itemCount: mybloc.data_NewTasks.length),
           );
         } else {
+          mybloc.add(selectEvent_NewTasks());
           return Center(
             child: Text(
               'New Tasks',

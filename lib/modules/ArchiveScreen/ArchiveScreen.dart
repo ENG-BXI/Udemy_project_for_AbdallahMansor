@@ -12,6 +12,8 @@ class ArchiveScreen extends StatelessWidget {
 
     return BlocBuilder<TodoAppBloc, TodoAppState>(
       builder: (context, state) {
+        
+        
         if (mybloc.data_Archive.length != 0) {
           return Padding(
             padding: const EdgeInsetsDirectional.only(start: 15, top: 15),

@@ -27,3 +27,9 @@ class deleteFromDataBase_by_Where extends TodoAppEvent {
   int id;
   deleteFromDataBase_by_Where(this.id);
 }
+
+class updateDataBaseEvent extends TodoAppEvent {
+  String status;
+  int id;
+  updateDataBaseEvent(this.id, this.status);
+}

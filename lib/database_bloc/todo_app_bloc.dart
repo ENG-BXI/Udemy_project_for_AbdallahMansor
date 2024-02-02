@@ -28,9 +28,10 @@ class TodoAppBloc extends Bloc<TodoAppEvent, TodoAppState> {
   Future<Database> CreateDatabase() async {
     Database database = await openDatabase(
       'todo.db',
-      version: 1,
+      version: 4,
       onCreate: (db, version) {
         debugPrint("@@@@@@@@@@@@@@@@@@@ database is created");
+        
         db
             .execute(
                 'CREATE TABLE tasks(id INTEGER , TITLE TEXT , date TEXT , time TEXT , status TEXT)')
@@ -41,6 +42,26 @@ class TodoAppBloc extends Bloc<TodoAppEvent, TodoAppState> {
         ).catchError(
           (error) {
             debugPrint("@@@@@@@@ this is error");
+          },
+        );
+      },
+      onUpgrade: (db, oldVersion, newVersion) {
+        db.execute("DROP TABLE tasks").then((value) {
+          print('drop is ok');
+        }).catchError((e) {
+          print('is error $e');
+        });
+        debugPrint("@@@@@@@@@@@@@@@@@@@ database is created by Upgrade");
+        db
+            .execute(
+                'CREATE TABLE tasks(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL , TITLE TEXT , date TEXT , time TEXT , status TEXT)')
+            .then(
+          (value) {
+            debugPrint('@@@@@@@@@@@@@@@@@@@@ table is created by Upgrade');
+          },
+        ).catchError(
+          (error) {
+            debugPrint("@@@@@@@@ this is error by Upgrade ");
           },
         );
       },
@@ -59,7 +80,7 @@ class TodoAppBloc extends Bloc<TodoAppEvent, TodoAppState> {
     Database _db = await CreateDatabase();
     _db
         .rawInsert(
-            'INSERT INTO tasks(id,TITLE,date,time,status) VALUES ("1","$title","$date","$time","new")')
+            'INSERT INTO tasks(TITLE,date,time,status) VALUES ("$title","$date","$time","new")')
         .then(
       (value) {
         debugPrint("${value.toString()} Insert is ok");
@@ -117,6 +138,14 @@ class TodoAppBloc extends Bloc<TodoAppEvent, TodoAppState> {
     _db.rawDelete('DELETE FROM tasks where id  = $id ');
   }
 
+  Future<int> updateDataBase(
+      {required String setstatusInQuere, required int id}) async {
+    Database db = await CreateDatabase();
+    int number = await db.rawUpdate(
+        "UPDATE tasks SET status = '$setstatusInQuere' where id =$id ");
+    return number;
+  }
+
   TodoAppBloc() : super(TodoAppInitial()) {
     on<TodoAppEvent>(
       (event, emit) async {
@@ -129,19 +158,21 @@ class TodoAppBloc extends Bloc<TodoAppEvent, TodoAppState> {
 
           emit(loadedState());
         } else if (event is selectEvent_NewTasks) {
-          await SelectFromDataBase_NewTasks().then(
+          SelectFromDataBase_NewTasks().then(
             (value) {
               data_NewTasks = value;
             },
           );
           emit(loadedState());
         } else if (event is selectEvent_Done) {
-          data_Done = await SelectFromDataBase_Done();
+          SelectFromDataBase_Done().then((value) {
+            data_Done = value;
+          });
           emit(loadedState());
         } else if (event is selectEvent_Archive) {
-          emit(loadingState());
-
-          data_Archive = await SelectFromDataBase_NewTasks();
+          SelectFromDataBase_Archive().then((value) {
+            data_Archive = value;
+          });
           emit(loadedState());
         } else if (event is deleteEvent) {
           await DeleteFromDatabase_All();
@@ -156,7 +187,14 @@ class TodoAppBloc extends Bloc<TodoAppEvent, TodoAppState> {
           emit(loadedState());
         } else if (event is deleteFromDataBase_by_Where) {
           DeleteFromDatabase_By_Where_Fun(event.id);
-        data_NewTasks =  await SelectFromDataBase_NewTasks();
+          data_NewTasks = await SelectFromDataBase_NewTasks();
+
+          emit(loadedState());
+        } else if (event is updateDataBaseEvent) {
+          updateDataBase(setstatusInQuere: event.status, id: event.id);
+          data_NewTasks = await SelectFromDataBase_NewTasks();
+          data_Done = await SelectFromDataBase_Done();
+          data_Archive = await SelectFromDataBase_Archive();
 
           emit(loadedState());
         }
