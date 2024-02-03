@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:today/BottomSheet_bloc/bottom_sheet_bloc.dart';
-import 'package:today/database_bloc/todo_app_bloc.dart';
+import 'package:today/Bussines%20logic/BottomSheet_bloc/bottom_sheet_bloc.dart';
+import 'package:today/Bussines%20logic/database_bloc/todo_app_bloc.dart';
 import 'package:today/main.dart';
 import 'package:today/modules/ArchiveScreen/ArchiveScreen.dart';
 import 'package:today/modules/BMIScreen/BMIScreen.dart';
@@ -18,8 +18,6 @@ String TodoScreen_router = 'TodoScreen';
 // Temp list
 // اذا اردت التحويل بين اكثر من حاجة ( التبديل ) نستخدم الليست
 // اذا اردت التحويل بين حاجتين ( التبديل ) نستخدم متغير بولين
-
-
 class TodoScreen extends StatelessWidget {
   var Scaffoldkey = GlobalKey<ScaffoldState>();
   // List Screens = [NewTask(), DoneScren(), ArchiveScreen()];
