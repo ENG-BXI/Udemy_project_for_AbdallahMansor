@@ -19,9 +19,6 @@ String TodoScreen_router = 'TodoScreen';
 // اذا اردت التحويل بين اكثر من حاجة ( التبديل ) نستخدم الليست
 // اذا اردت التحويل بين حاجتين ( التبديل ) نستخدم متغير بولين
 
-TextEditingController titleController = TextEditingController();
-TextEditingController timeController = TextEditingController();
-TextEditingController dateController = TextEditingController();
 
 class TodoScreen extends StatelessWidget {
   var Scaffoldkey = GlobalKey<ScaffoldState>();
@@ -31,6 +28,7 @@ class TodoScreen extends StatelessWidget {
   var FormKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    // to esily used 
     TodoAppBloc mybloc = BlocProvider.of<TodoAppBloc>(context);
 
     return BlocProvider(
@@ -77,14 +75,14 @@ class TodoScreen extends StatelessWidget {
                         Navigator.pop(context);
 
                         mybloc.add(insertEvent_NewTasks(
-                            title: titleController.text,
-                            date: dateController.text,
-                            time: timeController.text));
+                            title:mybloc. titleController.text,
+                            date: mybloc. dateController.text,
+                            time:mybloc.  timeController.text));
                         BlocProvider.of<BottomSheetBloc>(context)
                             .add(changeBottomSheetBarEvent(Icons.edit, false));
-                        titleController.text = '';
-                        dateController.text = '';
-                        timeController.text = '';
+                       mybloc.  titleController.text = '';
+                       mybloc.  dateController.text = '';
+                       mybloc.  timeController.text = '';
                       }
                     } else {
                       debugPrint("ok pppp    ${state.isBottomSheetShown}");
@@ -110,7 +108,7 @@ class TodoScreen extends StatelessWidget {
                                     children: [
                                       textBoxDefulat(
                                         text: "Tasks Title",
-                                        controller: titleController,
+                                        controller:mybloc.  titleController,
                                         vaildation: (value) {
                                           if (value.isEmpty) {
                                             return 'Title must be Not Empty';
@@ -124,7 +122,7 @@ class TodoScreen extends StatelessWidget {
                                       ),
                                       textBoxDefulat(
                                         text: "Tasks Time",
-                                        controller: timeController,
+                                        controller:mybloc.  timeController,
                                         vaildation: (value) {
                                           if (value.isEmpty) {
                                             return 'Time must be Not Empty';
@@ -137,10 +135,10 @@ class TodoScreen extends StatelessWidget {
                                                   context: context,
                                                   initialTime: TimeOfDay.now())
                                               .then((value) {
-                                            timeController.text = value
+                                            mybloc. timeController.text = value
                                                     ?.format(context)
                                                     .toString() ??
-                                                timeController.text;
+                                               mybloc.  timeController.text;
                                           });
                                         },
                                         NotKeboard: true,
@@ -150,7 +148,7 @@ class TodoScreen extends StatelessWidget {
                                       ),
                                       textBoxDefulat(
                                         text: "Tasks Date",
-                                        controller: dateController,
+                                        controller:mybloc.  dateController,
                                         vaildation: (value) {
                                           if (value.isEmpty) {
                                             return 'Date must be Not Empty';
@@ -167,13 +165,13 @@ class TodoScreen extends StatelessWidget {
                                             lastDate:
                                                 DateTime.parse('2024-09-27'),
                                           ).then((value) {
-                                            dateController.text = value != null
+                                          mybloc.   dateController.text = value != null
                                                 ? value.year.toString() +
                                                     "-" +
                                                     value.month.toString() +
                                                     "-" +
                                                     value.day.toString()
-                                                : dateController.text;
+                                                : mybloc. dateController.text;
                                           });
                                         },
                                         NotKeboard: true,
@@ -198,9 +196,9 @@ class TodoScreen extends StatelessWidget {
                             //   isBottomSheetShown = false;
                             //   iconFoatingActionBotton = Icons.edit;
                             // });
-                            titleController.text = '';
-                            dateController.text = '';
-                            timeController.text = '';
+                          mybloc.   titleController.text = '';
+                           mybloc.  dateController.text = '';
+                          mybloc.   timeController.text = '';
                           });
                     }
                   },

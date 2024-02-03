@@ -25,13 +25,17 @@ class TodoAppBloc extends Bloc<TodoAppEvent, TodoAppState> {
   IconData iconFoatingActionBotton = Icons.edit;
   bool isBottomSheetShown = false;
 
+  TextEditingController titleController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+
   Future<Database> CreateDatabase() async {
     Database database = await openDatabase(
       'todo.db',
       version: 4,
       onCreate: (db, version) {
         debugPrint("@@@@@@@@@@@@@@@@@@@ database is created");
-        
+
         db
             .execute(
                 'CREATE TABLE tasks(id INTEGER , TITLE TEXT , date TEXT , time TEXT , status TEXT)')
@@ -185,9 +189,19 @@ class TodoAppBloc extends Bloc<TodoAppEvent, TodoAppState> {
 
           emit(changeBottomNavBarState());
           emit(loadedState());
-        } else if (event is deleteFromDataBase_by_Where) {
+        } else if (event is deleteFromDataBase_by_Where_NewTasks) {
           DeleteFromDatabase_By_Where_Fun(event.id);
           data_NewTasks = await SelectFromDataBase_NewTasks();
+
+          emit(loadedState());
+        } else if (event is deleteFromDataBase_by_Where_Done) {
+          DeleteFromDatabase_By_Where_Fun(event.id);
+          data_Done = await SelectFromDataBase_Done();
+
+          emit(loadedState());
+        } else if (event is deleteFromDataBase_by_Where_Archive) {
+          DeleteFromDatabase_By_Where_Fun(event.id);
+          data_Archive = await SelectFromDataBase_Archive();
 
           emit(loadedState());
         } else if (event is updateDataBaseEvent) {

@@ -23,9 +23,17 @@ class changeBottomNavBarEvent extends TodoAppEvent {
   changeBottomNavBarEvent(this.currentIndex);
 }
 
-class deleteFromDataBase_by_Where extends TodoAppEvent {
+class deleteFromDataBase_by_Where_NewTasks extends TodoAppEvent {
   int id;
-  deleteFromDataBase_by_Where(this.id);
+  deleteFromDataBase_by_Where_NewTasks(this.id);
+}
+class deleteFromDataBase_by_Where_Done extends TodoAppEvent {
+  int id;
+  deleteFromDataBase_by_Where_Done(this.id);
+}
+class deleteFromDataBase_by_Where_Archive extends TodoAppEvent {
+  int id;
+  deleteFromDataBase_by_Where_Archive(this.id);
 }
 
 class updateDataBaseEvent extends TodoAppEvent {
